@@ -97,6 +97,10 @@ class AVLTree:
     def insert(self, value):
         self.root = self.__insert(self.root, value)
 
+    def insert_all(self, values: set):
+        for value in values:
+            self.root = self.__insert(self.root, value)
+
     def __find_min(self, node: Node) -> Node:
         return self.__find_min(node.left) if node.left else node
 
@@ -128,20 +132,28 @@ class AVLTree:
     def remove(self, value: int):
         self.root = self.__remove(self.root, value)
 
+    def __is_contains(self, node: Node, value: int) -> bool:
+        if not node:
+            return False
+        if value == node.value:
+            return True
+        if value < node.value:
+            return self.__is_contains(node.left, value)
+        else:
+            return self.__is_contains(node.right, value)
+
+    def is_contains(self, value: int) -> bool:
+        return self.__is_contains(self.root, value)
+
 
 tree = AVLTree()
-tree.insert(1)
-tree.insert(5)
-tree.insert(8)
-tree.insert(3)
-tree.insert(4)
-tree.insert(10)
-tree.insert(15)
-tree.insert(20)
-tree.insert(21)
-tree.insert(30)
-tree.insert(35)
-tree.insert(40)
+tree.insert_all({30, 15, 8, 1, 5, 10, 20, 35, 21, 3, 21, 40})
+print(tree.is_contains(30))
 tree.remove(30)
+print(tree.is_contains(30))
 tree.remove(20)
+print(tree.is_contains(10))
+print(tree.is_contains(18))
+print(tree.is_contains(40))
+print(tree.is_contains(2))
 print()
